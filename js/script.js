@@ -1,13 +1,13 @@
 $(document).ready(function() {
   'other';
 $('#name').focus();
-$('other-title').append('input type="text" id="other-title" name="job_role_other" placeholder="Your Job Role"');
-$('other-title').hide();
-$('#title').change(function(){
-  if($('#title option:selected').val() === "other"){
-    $('other-title').show();
+$('other').append('input type="text" id="other-title" name="job_role_other" placeholder="Your Job Role"');
+$('#user-title').click(function(){
+  $(".target").change();
+  if($('#title option:selected').val() === "Job Role"){
+    $('other').show();
   } else {
-    $('other-title').hide();
+    $('other').hide();
   }
-}
+})
 });
