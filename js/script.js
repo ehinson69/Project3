@@ -14,23 +14,33 @@ $('#other-title').hide();
 
 //**T-shirt section*/
 //**Select a t-shirt design and a color will show/hide.*/
-$('#colors-js-puns').hide();
+$('#colors-js-puns', '#colors-heart-js').hide();
 
 var shirtSelection = false;
-$('#design').change(function(){
-  if($('design option:selection').val() === "js puns") {
+$('#design').on('change', function() {
+  if($('design option:selection').val() == "js puns") {
     $('#colors-js-puns').show();
-    $('#color').html('<option value="cornflowerblue">Cornflower Blue (js puns shirt only)</option>;
-    $('#color').html('<option value="darkslategrey">Dark Slate Grey (JS Puns shirt only)</option>; 
-    $('#color').html('<option value="gold">Gold (JS Puns shirt only)</option>; 
-    $('#color').html('<option value="tomato">Tomato (I &#9829; JS shirt only)</option>;
-    $('#color').html('<option value="steelblue">Steel Blue (I &#9829; JS shirt only)</option>; 
-    $('#color').html('<option value="dimgrey">Dim Grey (I &#9829; JS shirt only)</option>;
-  shirtSelection = true;
-  return shirtSelection;
+    $('#color').html(<option value="cornflowerblue">Cornflower Blue (js puns shirt only)</option>);
+    $('#color').html(<option value="darkslategrey">Dark Slate Grey (JS Puns shirt only)</option>); 
+    $('#color').html(<option value="gold">Gold (JS Puns shirt only)</option>);
+    shirtSelection = true;
+    return shirtSelection;
+  } else {
+    $('#color-heart js').hide();
+    shirtSelection = false;
+    return shirtSelection;
+  }
+
+  if($('design option:selection').val() == "heart js") {
+    $('#color-heart-js').show();
+    $('#color').html(<option value="tomato">Tomato (I &#9829; JS shirt only)</option>);
+    $('#color').html(<option value="steelblue">Steel Blue (I &#9829; JS shirt only)</option>); 
+    $('#color').html(<option value="dimgrey">Dim Grey (I &#9829; JS shirt only)</option>);
+    shirtSelection = true;
+    return shirtSelection;
   } else {
     $('#color-js-puns').hide();
-    shirtSelection = fals;
+    shirtSelection = false;
     return shirtSelection;
   }
 });
