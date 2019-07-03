@@ -29,8 +29,9 @@ $(document).ready(function() {
     });
 });
 
-//**Users can register for activities. Real-time validation on line 35.
-//Reset the sum and all checkboxes before calculation on lines 36 and 37. */
+//**Users can register for activities. Real-time validation.Reset the sum and all checkboxes before calculation occurs. */
+$('.activities').append("<span id='totalCost'></span>");
+
 $('.activities').on('change', function() {
 let totalSum = 0;
 
@@ -41,24 +42,29 @@ for(let i = 0; i = activities.length; i++) {
   let activityText = activity.parentElement.innerText;
   let dollarValue = parseInt(activityText.slice(activityText.indexOf('$') + 1));
 }
+
   if($('input[name=' + activities.name + ']').prop('checked')) {
     totalSum += dollarValue;
   }
 
+  if($('input[name="all"]').prop('checked')) {
+    totalSum += 200;
+  } 
+
   if($('input[name="js-frameworks"]').prop('checked')) {
     totalSum += 100;
-    $('input[name="express"]').attr('disabled', true);
+    $('input[name="express"]').prop('disabled', true);
   } else if($('input[name="express"]').prop('checked')) {
     totalSum += 100;
-    $('input[name="js-frameworks"]').attr('disabled', true);
+    $('input[name="js-frameworks"]').prop('disabled', false);
     }
 
   if($('input[name="js-libs"]').prop('checked')) {
     totalSum += 100;
-    $('input[name="node"]').attr('disabled', true);
+    $('input[name="node"]').prop('disabled', true);
   } else if($('input[name="node"]').prop('checked')) {
     totalSum += 100;
-    $('input[name="js-libs"]').attr('disabled', true);
+    $('input[name="js-libs"]').prop('disabled', false);
     }
 
   if($('input[name="build-tools"]').prop('checked')) {
@@ -71,7 +77,7 @@ for(let i = 0; i = activities.length; i++) {
 
   let totalCostSpan = $('#totalCost');
   $('#totalCost').text("Total: $" + totalSum);
-
  
 });
 
+//***Payment Information section*/
