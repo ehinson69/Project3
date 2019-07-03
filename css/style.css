@@ -16,7 +16,7 @@ button {
 
 body {
   font: 1em/1.5;
-  color: rgba(6, 49, 68, 0.9);
+  color: rgba(68, 6, 11, 0.9);
 	background: #e6f0f5;
 }
 
@@ -97,7 +97,7 @@ input {
 
 input:focus {
 	background: #fff;
-	border-color: #5e97b0;
+	border-color: #5e69b0;
 	transition: border-color .4s, background-color .4s;
 }
 
@@ -107,25 +107,25 @@ input[type="radio"] {
 }
 
 button {
-	color: #fff;
+	color: rgb(255, 255, 255);
 	padding: .55em 1.25em;
-	background: #083f57;
+	background: #072f57;
 	margin: 1.25em 0 .5em;
 	cursor: pointer;
-	border: 2px solid black;
+	border: 2px solid red;
 	border-radius: 4px;
 	transition: all 0.5s;
 }
 
 button:hover {
-	background: #0887bd;
-	border: 2px solid #f4f6f6;
+	background: #0727bd;
+	border: 2px solid #f5f4f6;
 }
 
 input, 
 select, 
 option {
-	font-family: 'roboto', sans-serif;
+	font-family: 'roboto', serif;
 }
 
 /* ================================= 
