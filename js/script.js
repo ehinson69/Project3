@@ -81,3 +81,49 @@ for(let i = 0; i = activities.length; i++) {
 });
 
 //***Payment Information section*/
+ccPaymentOption.selected = true;
+paypalPaymentSection.style.display = "none";
+bitcoinPaymentSection.style.display = "none";
+
+var showPaymentMethod = function() {
+  //hide all the payment sections
+  ccPaymentSection.style.display = "none";
+  paypalPaymentSection.style.display = "none";
+  bitcoinPaymentSection.style.display = "none";
+
+  //then show the selected payment section
+  if (paymentSelect.value === 'credit card') {
+    ccPaymentSection.style.display = "block";
+  } else if (paymentSelect.value === 'paypal') {
+    paypalPaymentSection.style.display = 'initial';
+  } else {
+    bitcoinPaymentSection.style.display = 'initial';
+  }
+};
+
+paymentSelect.addEventListener("change", showPaymentMethod);
+var displayFieldsetError = function(fieldset) {
+  fieldset.classList.add("error");
+};
+
+var validateEmail = function(email) {
+  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+};
+
+var validateCCNum = function(number) {
+  var re = /^[0-9]{13,16}$/;
+  return re.test(number);
+};
+
+var validateZipCode = function(number) {
+  var re = /^[0-9]{5}$/;
+  return re.test(number);
+};
+
+var validateCVV = function(number) {
+  var re = /^[0-9]{3}$/;
+  return re.test(number);
+};
+
+
