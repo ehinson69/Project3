@@ -43,7 +43,8 @@ for(let i = 0; i = activities.length; i++) {
   let dollarValue = parseInt(activityText.slice(activityText.indexOf('$') + 1));
 }
 
-  if($('input[name=' + activities.name + ']').prop('checked')) {
+  if((activities).prop('checked')) {
+    console.log('activities');
     totalSum += dollarValue;
   }
 
@@ -81,11 +82,6 @@ for(let i = 0; i = activities.length; i++) {
 
 //***Payment Information section*/
 //show credit card as default option and hide the PayPal and Bitcoin options
-ccPaymentSection.selected = true;
-console.log(ccPaymentOption);
-paypalPaymentSection.style.display = "none";
-bitcoinPaymentSection.style.display = "none";
-
 //hide all the payment sections
 //then show the selected payment section
 function showPaymentMethod() {
@@ -100,8 +96,8 @@ function showPaymentMethod() {
   } else {
     bitcoinPaymentSection.style.display = 'initial';
   }
-};
 paymentSelect.addEventListener("change", showPaymentMethod);
+};
 
 //validate name
 function displayFieldsetError(fieldset) {
@@ -114,11 +110,11 @@ function displayFieldsetError(fieldset) {
 
 };
 //validate email
-var ValidateEmail = function(mail) {
+var validateEmail = function(mail) {
  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myForm.emailAddr.value)){
     return (true)
   }
-    alert("Sorry, you have entered an invalid email address!")
+  alert("Sorry, you have entered an invalid email address!")
     return (false)
 }
 var validateForm = function(e) {
@@ -131,7 +127,7 @@ var validateForm = function(e) {
 }
 
 //validate activity section
-var validateAcivities = function() {
+var validateActivities = function(){
   var re = /^[0-9]{}$/;
   return re.test();
 };
@@ -141,7 +137,7 @@ var activityCount = 0;
       activityCount++;
     }
   }
-  if (activityCount === 0) {
+  if (activityCount == 0) {
     e.preventDefault();
     displayFieldsetError(activitiesFieldset);
   }
@@ -153,9 +149,8 @@ var validateCCNum = function(number) {
 };
 //Credit Card validation
   //Only validate if Paypal or Bitcoin is selected.
-  if (paymentSelect.value === 'credit card') {
-
-    if (ccNumber.value === "") {
+  if (paymentSelect.value == 'credit card') {
+    if (ccNumber.value == "") {
       e.preventDefault();
       displayError(ccNumber, "Credit card number cannot be blank");
     } else {  
@@ -171,7 +166,7 @@ var validateZipCode = function(number) {
   var re = /^[0-9]{5}$/;
   return re.test(number);
 };
-if (zipCode.value === "") {
+if (zipCode.value == "") {
   e.preventDefault();
   displayError(zipCode, "Zip Code must have 5 digits.");
 } else {
@@ -187,17 +182,15 @@ var validateCVV = function(number) {
   var re = /^[0-9]{3}$/;
   return re.test(number);
 };
-if (CVV.value === "") {
+if (CVV.value == "") {
   e.preventDefault();
   displayError(CVV, "Enter the CVV code on the back of your card.");
 } else {
-  
   if (!validateCVV(CVV.value)) {
     e.preventDefault();
     displayError(CVV, "CVV must be a 3 digit number");
   }
 }
-
 submitButton.addEventListener("click", validateForm);
 });
 
