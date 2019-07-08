@@ -77,8 +77,9 @@ for(let i = 0; i = activities.length; i++) {
 
   let totalCostSpan = $('#totalCost');
   $('#totalCost').text("Total: $" + totalSum);
- 
 });
+console.log(typeof declaredButUndefinedVariable);
+//expected output: "undefined";
 
 //***Payment Information section*/
 ccPaymentOption.selected = true;
@@ -134,5 +135,6 @@ function validateCVV(number) {
   var re = /^[0-9]{3}$/;
   return re.test(number);
 };
-
+console.log(typeof 42);
+// expected output: "number"
 
