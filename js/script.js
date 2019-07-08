@@ -85,13 +85,13 @@ ccPaymentOption.selected = true;
 paypalPaymentSection.style.display = "none";
 bitcoinPaymentSection.style.display = "none";
 
-var showPaymentMethod = function() {
-  //hide all the payment sections
+//hide all the payment sections
+//then show the selected payment section
+function showPaymentMethod() {
   ccPaymentSection.style.display = "none";
   paypalPaymentSection.style.display = "none";
   bitcoinPaymentSection.style.display = "none";
 
-  //then show the selected payment section
   if (paymentSelect.value === 'credit card') {
     ccPaymentSection.style.display = "block";
   } else if (paymentSelect.value === 'paypal') {
@@ -100,28 +100,32 @@ var showPaymentMethod = function() {
     bitcoinPaymentSection.style.display = 'initial';
   }
 };
-
+//validate name
 paymentSelect.addEventListener("change", showPaymentMethod);
-var displayFieldsetError = function(fieldset) {
+function displayFieldsetError(fieldset) {
   fieldset.classList.add("error");
 };
-
-var validateEmail = function(email) {
-  var re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  return re.test(email);
-};
-
-var validateCCNum = function(number) {
+//validate email
+function ValidateEmail(mail) {
+ if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myForm.emailAddr.value))
+  {
+    return (true)
+  }
+    alert("You have entered an invalid email address!")
+    return (false)
+}
+//validate credit card number
+function validateCCNum(number) {
   var re = /^[0-9]{13,16}$/;
   return re.test(number);
 };
-
-var validateZipCode = function(number) {
+//validate zip code
+function validateZipCode(number) {
   var re = /^[0-9]{5}$/;
   return re.test(number);
 };
-
-var validateCVV = function(number) {
+//validate cvv number
+function validateCVV(number) {
   var re = /^[0-9]{3}$/;
   return re.test(number);
 };
