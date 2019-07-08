@@ -107,7 +107,7 @@ function displayFieldsetError(fieldset) {
   fieldset.classList.add("error");
 };
 //validate email
-function ValidateEmail(mail) {
+var ValidateEmail = function(mail) {
  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myForm.emailAddr.value))
   {
     return (true)
@@ -116,22 +116,22 @@ function ValidateEmail(mail) {
     return (false)
 }
 //validte activity section
-function validateAcivities() {
+var validateAcivities = function() {
   var re = /^[0-9]{}$/;
   return re.test();
 };
 //validate credit card number
-function validateCCNum(number) {
+var validateCCNum = function(number) {
   var re = /^[0-9]{13,16}$/;
   return re.test(number);
 };
 //validate zip code
-function validateZipCode(number) {
+var validateZipCode = function(number) {
   var re = /^[0-9]{5}$/;
   return re.test(number);
 };
 //validate cvv number
-function validateCVV(number) {
+var validateCVV = function(number) {
   var re = /^[0-9]{3}$/;
   return re.test(number);
 };
