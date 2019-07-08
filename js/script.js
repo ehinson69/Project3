@@ -111,7 +111,7 @@ function ValidateEmail(mail) {
   {
     return (true)
   }
-    alert("You have entered an invalid email address!")
+    alert("Sorry, you have entered an invalid email address!")
     return (false)
 }
 //validte activity section
