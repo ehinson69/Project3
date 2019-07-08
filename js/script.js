@@ -114,6 +114,11 @@ function ValidateEmail(mail) {
     alert("You have entered an invalid email address!")
     return (false)
 }
+//validte activity section
+function validateAcivities() {
+  var re = /^[0-9]{}$/;
+  return re.test();
+};
 //validate credit card number
 function validateCCNum(number) {
   var re = /^[0-9]{13,16}$/;
