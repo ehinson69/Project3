@@ -40,20 +40,22 @@ $(document).ready(function() {
     var dateTime = inputFields[1] ;
     var price =  inputFields[3] ;
          
-    if($(this).prop('checked')){
+    if($(this).prop('checked')) {
       totalSum += parseInt(price);
       $('.activities #totalSum').text('$' + totalSum);
       $('.activities input').each(function(){
-        if ($(this).parent(preventDefault).text().includes(dateTime)){
-          $(this).prop("disabled", false);
+        if ($(this).parent().text().includes(dateTime)){
+          $(this).prop("disabled", true);
         }
       } else {//unchecked
-      totalSum -= parseInt(price);
-      $('.activities #totalSum').text('$' + totalSum);
+          if($(this).prop('unchecked')) {
+            totalSum -= parseInt(price);
+          }
+      }
 
-      });
-    };
+      
 
+                     
   //***Payment Information section*/
   //show credit card as default option and hide the PayPal and Bitcoin options
   // ccPaymentSection.selected = true;
