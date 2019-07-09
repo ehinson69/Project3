@@ -14,7 +14,7 @@ $(document).ready(function() {
 
   //**T-shirt section*/
   //**Select a t-shirt design and a color will show/hide.*/
-    // $('#color option', '#design option:first').hide();
+  // $('#color option', '#design option:first').hide();
        
     $('#color option').hide();
     $('#design option:first').hide();
@@ -29,63 +29,78 @@ $(document).ready(function() {
       }
     });
 
-  //**Users can register for activities. Real-time validation.Reset the sum and all checkboxes before calculation occurs. */
+  //**Users can register for activities but cannot choose two activities on the same day and time. */
   $('.activities').append("<span id='totalSum'></span>");
   let totalSum = 0;
-
+  //When each activity checkbox is checked, the cost will add or subtract. 
   $('.activities input:checkbox').on('change', function() {
+    var inputFields = $(this).parent().text().split(/[—,$]/);
+    console.log(inputFields);
+    var title =  inputFields[0];
+    var dateTime = inputFields[1] + '#noDateGiven';
+    var price =  inputFields[3];
+    console.log('title: '+title +' dateTime: '+dateTime +' price: '+price)  
+    
+    alert($(dateTime).presence('#noDateGiven'));
 
-    var inputFields = $(this).parent().text().split(/[—,$]/) ;  
-    var title =  inputFields[0] ;
-    var dateTime = inputFields[1] ;
-    var price =  inputFields[3] ;
-         
-    if($(this).prop('checked')) {
-      totalSum += parseInt(price);
-      $('.activities #totalSum').text('$' + totalSum);
+    if($(this).prop('checked')) {//checked boxes
+      totalSum += parseInt(price)*1;
+      $('.activities #totalSum').text('Total Cost $' + totalSum);
       $('.activities input').each(function(){
-        if ($(this).parent().text().includes(dateTime)){
+        if ($(this).parent().text().includes(dateTime) && (!$(this).parent().text().includes(title))){
           $(this).prop("disabled", true);
         }
-      } else {//unchecked
-          if($(this).prop('unchecked')) {
-            totalSum -= parseInt(price);
-          }
-      }
+      });
+    }
+    else {//unchecked boxes
+          if($(this).prop('checked') == false) {
+            totalSum -= parseInt(price)*1;
+            $('.activities #totalSum').text('Total Cost $' + totalSum);
+            $('.activities input').each(function(){
+              if ($(this).parent().text().includes(dateTime)){
+                $(this).prop("disabled", false);
+              }
+            });
+          }  
+    }
 
-      
+  });
 
-                     
+});               
   //***Payment Information section*/
-  //show credit card as default option and hide the PayPal and Bitcoin options
-  // ccPaymentSection.selected = true;
-    // $('#payment option:first').hide();
-
-  //hide all the payment sections
-  //then show the selected payment section
-  // function showPaymentMethod() {
-  //   ccPaymentSection.style.display = "none";
-  //   paypalPaymentSection.style.display = "none";
-  //   bitcoinPaymentSection.style.display = "none";
-
-  //   if (paymentSelect.value === 'credit card') {
-  //     ccPaymentSection.style.display = "block";
-  //   } else if (paymentSelect.value === 'paypal') {
-  //     paypalPaymentSection.style.display = 'initial';
-  //   } else {
-  //     bitcoinPaymentSection.style.display = 'initial';
-  //   }
-  // };
-  // paymentSelect.addEventListener("change", showPaymentMethod);
+  //Show credit card as default option and hide the PayPal and Bitcoin options until selected.
+  //Adding classes to the other payment option divs to make them easier to work with.
+  $('#credit-card').next().addClass('paypal').hide;
+  $('#credit-card').next().next().addClass('bitcoin').hide;
+  
+  $('#credit-card').show();
+  $('#payment option[value="credit card"]').prop('selected', true);
+  
+  $('#payment option[value="select_method"]').hide();
+  
+  $('#payment').change((event) => {
+    let selected = $('#payment option:selected').text();
+      $('.paypal').hide();
+      $('#credit-card').hide();
+      $('.bitcoin').hide();
+      
+      if ( selected === "Credit Card" ) {
+          $('#credit-card').show();
+      } else if ( selected === "PayPal" ) {
+          $('.paypal').show();
+      } else if ( selected === "Bitcoin" ) {
+          $('.bitcoin').show();
+      }
+  });
 
   // //validate name
   // function displayFieldsetError(fieldset) {
   //   fieldset.classList.add("error");
 
-  //   if (nameField.value === "") {
-  //     e.preventDefault();
-  //     displayError(nameField, "Name cannot be blank.");
-  //   }
+  // if (nameField.value === "") {
+  //   e.preventDefault();
+  //   displayError(nameField, "Name cannot be blank.");
+  // }
 
   // };
   // //validate email
@@ -99,11 +114,11 @@ $(document).ready(function() {
   // var validateForm = function(e) {
   //   clearErrors();
 
-  //   if (!validateEmail(emailField.value)) {
-  //     e.preventDefault();
-  //     displayError(emailField, "A valid email address is required.");
-  //   }
-  // }
+  //if (!validateEmail(emailField.value)) {
+  //  e.preventDefault();
+  //  displayError(emailField, "A valid email address is required.");
+  //  }
+  //}
 
   // //validate activity section
   // var validateAcivities = function() {
@@ -116,9 +131,8 @@ $(document).ready(function() {
   //   for (var i = 0; i < activities.length; i++) {
   //     if (activities[i].checked) {
   //       activityCount++;
-  //     }
   //   }
-
+  //}
     
   // //validate credit card number
   // var validateCCNum = function(number) {
@@ -126,19 +140,19 @@ $(document).ready(function() {
   //   return re.test(number);
   // };
   // //Credit Card validation
-  //   //Only validate if Paypal or Bitcoin is selected.
-  //   if (paymentSelect.value === 'credit card') {
+  // //Only validate if Paypal or Bitcoin is selected.
+  //if (paymentSelect.value === 'credit card') {
 
-  //     if (ccNumber.value === "") {
-  //       e.preventDefault();
-  //       displayError(ccNumber, "Credit card number cannot be blank");
-  //     } else {  
-  //       if (!validateCCNum(ccNumber.value)) {
-  //         e.preventDefault();
-  //         displayError(ccNumber, "Credit card number must be a 13-16 digit number");
-  //       }
-  //     }
-  //   }
+  //if (ccNumber.value === "") {
+  //  e.preventDefault();
+  //  displayError(ccNumber, "Credit card number cannot be blank");
+  //} else {  
+  //  if (!validateCCNum(ccNumber.value)) {
+  //   e.preventDefault();
+  //   displayError(ccNumber, "Credit card number must be a 13-16 digit number");
+  //  }
+  //}
+  //};
 
   // //validate zip code
   // var validateZipCode = function(number) {
@@ -172,48 +186,6 @@ $(document).ready(function() {
   //   }
   // }
 
-  // submitButton.addEventListener("click", validateForm);
-
-  // let activities = $('.activities.input[type=checkbox]');
-
-//  let activities = $('.activities');
- 
-// let activityText = activity.parentElement.innerText;
-// let dollarValue = parseInt(activityText.slice(activityText.indexOf('$') + 1));
-     
-// if($('input[name=' + activity.name + ']').prop('checked')) {
-//   totalSum += dollarValue;
-// }
- 
-//        if($('all').prop('checked')) {
-//          totalSum += 200;
-//        } 
- 
-//        if($('js-frameworks').prop('checked')) {
-//          totalSum += 100;
-//          $('express').prop('disabled', true);
-//        } else if($('express').prop('checked')) {
-//          totalSum += 100;
-//          $('js-frameworks').prop('disabled', false);
-//          }
- 
-//        if($('js-libs').prop('checked')) {
-//          totalSum += 100;
-//          $('node').prop('disabled', true);
-//        } else if($('node').prop('checked')) {
-//          totalSum += 100;
-//          $('js-libs').prop('disabled', false);
-//          }
- 
-//        if($('build-tools').prop('checked')) {
-//          totalSum += 100;
-//        }
- 
-//        if($('npm').prop('checked')) {
-//          totalSum += 100;
-//        }
- 
-//        let totalCostSpan = $('#totalCost');
-//        $('#totalCost').text("Total: $" + totalSum);
- 
-//      }
+// submitButton.addEventListener("click", validateForm);
+//let totalCostSpan = $('#totalCost');
+//$('#totalCost').text("Total: $" + totalSum);
