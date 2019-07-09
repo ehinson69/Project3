@@ -39,29 +39,20 @@ $(document).ready(function() {
     var title =  inputFields[0] ;
     var dateTime = inputFields[1] ;
     var price =  inputFields[3] ;
-
          
     if($(this).prop('checked')){
       totalSum += parseInt(price);
       $('.activities #totalSum').text('$' + totalSum);
       $('.activities input').each(function(){
-        if ($(this).parent().text().includes(dateTime)){
-          $(this).prop("disabled", true);
-          
-
+        if ($(this).parent(preventDefault).text().includes(dateTime)){
+          $(this).prop("disabled", false);
         }
-       
-      });
-
-
-
-    } else{//unchecked
+      } else {//unchecked
       totalSum -= parseInt(price);
       $('.activities #totalSum').text('$' + totalSum);
 
-    }
-
-  });
+      });
+    };
 
   //***Payment Information section*/
   //show credit card as default option and hide the PayPal and Bitcoin options
@@ -126,11 +117,7 @@ $(document).ready(function() {
   //     }
   //   }
 
-  //   // if (activityCount === 0) {
-  //   //   e.preventDefault();
-  //   //   displayFieldsetError(activitiesFieldset);
-  //   // }
-
+    
   // //validate credit card number
   // var validateCCNum = function(number) {
   //   var re = /^[0-9]{13,16}$/;
@@ -184,35 +171,17 @@ $(document).ready(function() {
   // }
 
   // submitButton.addEventListener("click", validateForm);
-});
 
-
-// ------------------------------
-
-
- // let activities = $('.activities.input[type=checkbox]');
+  // let activities = $('.activities.input[type=checkbox]');
 
 //  let activities = $('.activities');
-
-//  console.log('activities: ' + activities.val());
  
-//  console.log('activities length: ' + activities.length);
- 
- 
-//      for(let i = 0; i = activities.length; i++) {
-//        let activity = activities[i];
- 
-//        console.log('activity: ' + activity);
- 
- 
- 
-//        let activityText = activity.parentElement.innerText;
-//        let dollarValue = parseInt(activityText.slice(activityText.indexOf('$') + 1));
+// let activityText = activity.parentElement.innerText;
+// let dollarValue = parseInt(activityText.slice(activityText.indexOf('$') + 1));
      
- 
-//        if($('input[name=' + activity.name + ']').prop('checked')) {
-//          totalSum += dollarValue;
-//        }
+// if($('input[name=' + activity.name + ']').prop('checked')) {
+//   totalSum += dollarValue;
+// }
  
 //        if($('all').prop('checked')) {
 //          totalSum += 200;
