@@ -33,28 +33,24 @@ $(document).ready(function() {
       }
     });
 
-//***********************************Activities Section********************/
-//**Users can register for activities but cannot choose two activities on the same day and time. */
-  $('.activities').append("<span id='totalSum'></span>");
-  let totalSum = 0;
-
+// //***********************************Activities Section********************/
 //When each activity checkbox is checked, the cost will add or subtract. 
   $('.activities input:checkbox').on('change', function() {
+    let totalSum = 0;
     var inputFields = $(this).parent().text().split(/[—,$]/);
-    var inputFields = $(this).parent().text().split(/[—$]/);
+   // var inputFieldsOne = $(this).parent().text().split(/[—$]/);
     console.log(inputFields);
     var title =  inputFields[0];
     var dateTime = inputFields[1];
     var price =  inputFields[3];
     console.log('title: '+title +' dateTime: '+dateTime +' price: '+price)
-    console.log('title: '+title +' price: '+price)  
+   // console.log('title: '+title +' price: '+price)  
     
     alert($(dateTime).presence());
 
     if($(this).prop('checked')) {//checked boxes
-      totalSum += parseInt(price)*1;
-      $('.activities #totalSum').text('Total Cost $' + totalSum);
-      $('.activities input').each(function(){
+      totalSum += parseInt(price);
+      $('.activities input: checkbox').each(function(){
         if ($(this).parent().text().includes(dateTime) && (!$(this).parent().text().includes(title))){
           $(this).prop("disabled", true);
         }
@@ -62,23 +58,22 @@ $(document).ready(function() {
     }
     else {//unchecked boxes
           if($(this).prop('checked') == false) {
-            totalSum -= parseInt(price)*1;
-            $('.activities #totalSum').text('Total Cost $' + totalSum);
-            $('.activities input').each(function(){
+            totalSum -= parseInt(price);
+            $('.activities input: checkbox').each(function(){
               if ($(this).parent().text().includes(dateTime) && (!$(this).parent().text().includes(title))){
                 $(this).prop("disabled", false);
               }
             });
           }  
     }
-
+    $('.activities #totalSum').text('Total Cost $' + totalSum);
   });
 
 //*****************************Payment Information section*****************************/
   //Show credit card as default option and hide the PayPal and Bitcoin options until selected.
   //Adding classes to the other payment option divs to make them easier to work with.
-  $('#credit-card').next().addClass('paypal').hide;
-  $('#credit-card').next().next().addClass('bitcoin').hide;
+  $('#credit-card').show().next().addClass('paypal').hide();
+  $('#credit-card').show().next().next().addClass('bitcoin').hide();
   
   $('#credit-card').show();
   $('#payment option[value="credit card"]').prop('selected', true);
@@ -152,9 +147,9 @@ $(document).ready(function() {
 
   if (payment.value === 'credit card') {
 
-    if (cardNumber.value === "") {
+    if (creditNumber.value === "") {
     e.preventDefault();
-    displayError(cardNumber, "Credit card number cannot be blank");
+    displayError(creditNumber, "Credit card number cannot be blank");
     } else {  
       if (!validateCardNumber(cardNumber.value)) {
         e.preventDefault();
