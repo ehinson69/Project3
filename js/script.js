@@ -35,9 +35,9 @@ $(document).ready(function() {
 
 // //***********************************Activities Section********************/
 //When each activity checkbox is checked, the cost will add or subtract. 
-$(":checkbox").change(function(){
-  $(".conflict").remove();
-  $("#activityerror").remove();
+  $(":checkbox").change(function(){
+    $(".conflict").remove();
+    $("#activityerror").remove();
 
   var frameworks = $("input[name='js-frameworks']");
   var express = $("input[name='express']");
@@ -58,11 +58,11 @@ $(":checkbox").change(function(){
   timeConflict(express, frameworks);
   timeConflict(libraries, node);
   timeConflict(node, libraries);
-});
+  });
 //Users select activities to register and receive a running total.
-$(":checkbox").change(function(){
-  var total = 0;
-  $("#cost").remove();
+  $(":checkbox").change(function(){
+    var total = 0;
+    $("#cost").remove();
 //Only the Main Conference is $200, so when checked, it will add up.
   if($("input[name='all']").is(":checked"))  {
     total += 200;
@@ -108,11 +108,12 @@ $(":checkbox").change(function(){
   });
 
 //************************************Validation Section*************************/
+
 //validate name
-function validateName() {
-  const nameRegex = /^[a-zA-Z]+$/;
-  const name = $('#name').val();
-  let nameError = false;
+  function validateName() {
+    const nameRegex = /^[a-zA-Z]+$/;
+    const name = $('#name').val();
+  // let nameError = false;
   if(nameRegex.test(name)){
     $('#name').css('border-color', "black");
     $('#name').prev().css('color', "black");
@@ -121,29 +122,42 @@ function validateName() {
     $('#name').css('border-color', "red");
     $('#name').prev().css('color', "red");
     nameError = true;
-    //displayError(nameField, "Name cannot be blank.");
   }
 };
 //validate email
-function validateEmail() {
-  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-  const email = $('#mail').val();
-  let emailError = false;
-  if(emailRegex.test(email)){
-    $('#mail').css('border-color', "black");
-    $('#mail').prev().css('color', "black");
-    emailError = false;
-  } else {
+  function validateEmail() {
+    const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+    const email = $('#mail').val();
+  // let emailError = false;
+    if(emailRegex.test(email)){
+      $('#mail').css('border-color', "black");
+      $('#mail').prev().css('color', "black");
+      emailError = false;
+    } else {
     $('#mail').css('border-color', "red");
     $('#mail').prev().css('color', "red");
     emailError = true;
-  }
-};
+    }
+  };
+//validate activities
+function validateActivities() {
+  let activitiesCheck = [];
+  $('.activities input:checked').each(() =>{
+    activitiesCheck.push($(this).text());
+  });
+  if(activitiesCheck.length < 1){
+    $('.activities legend').css('color', "red");
+    activitiesError = true;
+  } else {
+    $('.activities legend').css('color', "black");
+    activitiesError = false;
+  };
+}
 //validate credit card
 function validateCreditCard() {
   const ccRegex = /^[0-9]{13,16}$/;
   const credit = $('#cc-num').val();
-  let ccError = false;
+  // let ccError = false;
   if(ccRegex.test(credit)){
     $('#cc-num').css('border-color', "black");
     $('#cc-num').prev().css('color', "black");
@@ -158,7 +172,7 @@ function validateCreditCard() {
 function validateZip() {
   const zipRegex = /^[0-9]{5}$/;
   const zip = $('#zip').val();
-  let zipError = false;
+  // let zipError = false;
   if(zipRegex.test(zip)){
     $('#zip').css('border-color', "black");
     $('#zip').prev().css('color', "black");
@@ -173,7 +187,7 @@ function validateZip() {
 function validateCVV() {
   const cvvRegex = /^[0-9]{3}$/;
   const cvv = $('#cvv').val();
-  let cvvError = false;
+  // let cvvError = false;
   if(cvvRegex.test(cvv)){
     $('#cvv').css('border-color', "black");
     $('#cvv').prev().css('color', "black");
@@ -184,11 +198,6 @@ function validateCVV() {
     cvvError = true;
   }
 };
-  //validate activity section
-  // var validateAcivities = function() {
-  //   var re = /^[0-9]{}$/;
-  //   return re.test();
-  // };
   
 // if(submitcounter > 0) {
 //   e.preventDefault();
@@ -199,36 +208,44 @@ function validateCVV() {
 //   alert("Registration accepted");
 // };
 
-function validateAll(){
-  validateName();
-  validateEmail();
-  creditCardError();
-}
-function creditCardError() {
-  if('#payment option[value="credit card"]')
-  validateZip();
-  validateCreditCard();
-  validateCVV();
-}
-$('button:submit').click(function(){
-  event.preventDefault();
-  validateAll();
-  nameError = true;
-  emailError = true;
-  ccError = true;
-  zipError = true;
-  cvvError = true;
-
-if(nameError && emailError && ccError && zipError && cvvError){
-  alert ('registration completion');
-} else {
-  alert('please fix the red portions');
-}
-
-});
+  function validateAll() {
+    validateName();
+    validateEmail();
+    creditCardError();
+    validateActivities();
+  }
+  function creditCardError() {
+    if('#payment option[value="credit card"]') {
+    validateZip();
+    validateCreditCard();
+    validateCVV();
+    }
+  }
+  $('button:submit').click(function(event){
+    nameError = true;
+    emailError = true;
+    ccError = true;
+    zipError = true;
+    cvvError = true;
+    activitiesError = true;
+    event.preventDefault();
+    validateAll();
+  
+  if(nameError || emailError || creditCardError || activitiesError){
+    alert ('Please fix the errors in red.');
+  } else {
+  alert('Registration is complete!');
+  location.reload(true);
+  }
+  console.log("name is" + nameError);
+  console.log("email is" + emailError);
+  console.log("cc is" + ccError);
+  console.log("zip is" + zipError);
+  console.log("cvv is" + cvvError);
+  console.log("activities is" + activitiesError);
+  });
 // submitButton.addEventListener("click", validateForm);
 // let totalCostSpan = $('#totalCost');
 // $('#totalCost').text("Total: $" + totalSum);
-
 });
 
