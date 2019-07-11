@@ -126,7 +126,7 @@ function validateName() {
 };
 //validate email
 function validateEmail() {
-  const emailRegex = /^[w-.+]+@[a-zA-Z0-9.-]+.[a-zA-z0-9]{2,4}$/;
+  const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
   const email = $('#mail').val();
   let emailError = false;
   if(emailRegex.test(email)){
@@ -184,75 +184,11 @@ function validateCVV() {
     cvvError = true;
   }
 };
-
-
-//validate email
-  //   function ValidateEmail(email){
-  //     const emailRegex = /^[w-.+]+@[a-zA-Z0-9.-]+.[a-zA-z0-9]{2,4}$/;
-  //   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myForm.emailAddress.value)){
-  //     return (true)
-  //   }
-  //   alert("Sorry, you have entered an invalid email address!")
-  //   return (false)
-  // }
-
   //validate activity section
   // var validateAcivities = function() {
   //   var re = /^[0-9]{}$/;
   //   return re.test();
   // };
-
-  //Credit Card Number validation
-  //Only validate if Paypal or Bitcoin is selected.
-  // var validateCardNumber = function(number) {
-  //   var re = /^[0-9]{13,16}$/;
-  //   return re.test(number);
-  // };
-
-  // if (payment.value === 'credit card') {
-
-  //   if (creditNumber.value === "") {
-  //   e.preventDefault();
-  //   displayError(creditNumber, "Credit card number cannot be blank");
-  //   } else {  
-  //     if (!validateCardNumber(cardNumber.value)) {
-  //       e.preventDefault();
-  //       displayError(cardNumber, "Credit card number must be a 13-16 digit number");
-  //     }
-  //   }
-  // };
-
-  // //validate zip code
-  // var validateZipCode = function(number) {
-  //   var re = /^[0-9]{5}$/;
-  //   return re.test(number);
-  // };
-  // if (zipCode.value === "") {
-  //   // e.preventDefault();
-  //   displayError(zipCode, "Zip Code must have 5 digits.");
-  // } else {
-  //     if (!validateZipCode(zipCode.value)) {
-  //     // e.preventDefault();
-  //     displayError(zipCode, "Zip Code must be a 5 digit number");
-  //   }
-  // }
-
-  //validate cvv number
-  // var validateCVV = function(number) {
-  //   var re = /^[0-9]{3}$/;
-  //   return re.test(number);
-  // };
-  // if (CVV.value === "") {
-  //   e.preventDefault();
-  //   displayError(CVV, "Enter the CVV code on the back of your card.");
-  // } else {
-    
-  //   if (!validateCVV(CVV.value)) {
-  //     e.preventDefault();
-  //     displayError(CVV, "CVV must be a 3 digit number");
-  //   }
-  // }
-
   
 // if(submitcounter > 0) {
 //   e.preventDefault();
@@ -269,12 +205,12 @@ function validateAll(){
   creditCardError();
 }
 function creditCardError() {
-  if(selected === "Credit Card")
+  if('#payment option[value="credit card"]')
   validateZip();
   validateCreditCard();
   validateCVV();
 }
-$('button type="submit"').click(function(){
+$('button:submit').click(function(){
   event.preventDefault();
   validateAll();
   nameError = true;
@@ -282,6 +218,13 @@ $('button type="submit"').click(function(){
   ccError = true;
   zipError = true;
   cvvError = true;
+
+if(nameError && emailError && ccError && zipError && cvvError){
+  alert ('registration completion');
+} else {
+  alert('please fix the red portions');
+}
+
 });
 // submitButton.addEventListener("click", validateForm);
 // let totalCostSpan = $('#totalCost');
