@@ -38,13 +38,13 @@ $(document).ready(function() {
   $('.activities input:checkbox').on('change', function() {
     let totalSum = 0;
     var inputFields = $(this).parent().text().split(/[—,$]/);
-   // var inputFieldsOne = $(this).parent().text().split(/[—$]/);
+    var inputFieldsOne = $(this).parent().text().split(/[—$]/);
     console.log(inputFields);
     var title =  inputFields[0];
     var dateTime = inputFields[1];
     var price =  inputFields[3];
     console.log('title: '+title +' dateTime: '+dateTime +' price: '+price)
-   // console.log('title: '+title +' price: '+price)  
+    console.log('title: '+title +' price: '+price)  
     
     alert($(dateTime).presence());
 
