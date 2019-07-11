@@ -35,39 +35,50 @@ $(document).ready(function() {
 
 // //***********************************Activities Section********************/
 //When each activity checkbox is checked, the cost will add or subtract. 
-  $('.activities input:checkbox').on('change', function() {
-    let totalSum = 0;
-    var inputFields = $(this).parent().text().split(/[—,$]/);
-    var inputFieldsOne = $(this).parent().text().split(/[—$]/);
-    console.log(inputFields);
-    var title =  inputFields[0];
-    var dateTime = inputFields[1];
-    var price =  inputFields[3];
-    console.log('title: '+title +' dateTime: '+dateTime +' price: '+price)
-    console.log('title: '+title +' price: '+price)  
-    
-    alert($(dateTime).presence());
+$(":checkbox").change(function(){
+  $(".conflict").remove();
+  $("#activityerror").remove();
 
-    if($(this).prop('checked')) {//checked boxes
-      totalSum += parseInt(price);
-      $('.activities input: checkbox').each(function(){
-        if ($(this).parent().text().includes(dateTime) && (!$(this).parent().text().includes(title))){
-          $(this).prop("disabled", true);
-        }
-      });
+  var frameworks = $("input[name='js-frameworks']");
+  var express = $("input[name='express']");
+  var libraries = $("input[name='js-libs']");
+  var node = $("input[name='node']");
+//Conflicts with the same day and times to disable if chosen and grayed out.
+  function timeConflict(workshop, conflict){
+    if (workshop.is(":checked")) {
+      conflict.attr("disabled", true);
+      conflict.parent().after("<p class='conflict'>This workshop conflicts with your current selection.</p>");
+      conflict.parent().css('color','gray');
+      } else {
+        conflict.attr("disabled", false);
+        conflict.parent().css('color','#000');
+      }
     }
-    else {//unchecked boxes
-          if($(this).prop('checked') == false) {
-            totalSum -= parseInt(price);
-            $('.activities input: checkbox').each(function(){
-              if ($(this).parent().text().includes(dateTime) && (!$(this).parent().text().includes(title))){
-                $(this).prop("disabled", false);
-              }
-            });
-          }  
+  timeConflict(frameworks, express);
+  timeConflict(express, frameworks);
+  timeConflict(libraries, node);
+  timeConflict(node, libraries);
+});
+//Users select activities to register and receive a running total.
+$(":checkbox").change(function(){
+  var total = 0;
+  $("#cost").remove();
+//Only the Main Conference is $200, so when checked, it will add up.
+  if($("input[name='all']").is(":checked"))  {
+    total += 200;
+  }
+//Workshops that are not the Main Conference are $100, so when checked, they will add to total.
+  $(".activities input:not([name='all'])").each(function(){
+    if ($(this).is(":checked")) {
+      total += 100;
     }
-    $('.activities #totalSum').text('Total Cost $' + totalSum);
   });
+//Append the activities and get a total cost for the user.
+  if(total > 0) {
+    $(".activities").append("<p id='cost'>Total cost: $" + total + " </p>");
+  }
+});
+
 
 //*****************************Payment Information section*****************************/
   //Show credit card as default option and hide the PayPal and Bitcoin options until selected.
@@ -97,99 +108,184 @@ $(document).ready(function() {
   });
 
 //************************************Validation Section*************************/
-  //validate name
-  function displayFieldsetError(fieldset) {
-    fieldset.classList.add("error");
-
-    if (nameField.value === "") {
-      e.preventDefault();
-      displayError(nameField, "Name cannot be blank.");
-    }
-  };
-
-  //validate email
-  var ValidateEmail = function(mail) {
-  if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myForm.emailAddr.value)){
-      return (true)
-    }
-      alert("Sorry, you have entered an invalid email address!")
-      return (false)
+//validate name
+function validateName() {
+  const nameRegex = /^[a-zA-Z]+$/;
+  const name = $('#name').val();
+  let nameError = false;
+  if(nameRegex.test(name)){
+    $('#name').css('border-color', "black");
+    $('#name').prev().css('color', "black");
+    nameError = false;
+  } else {
+    $('#name').css('border-color', "red");
+    $('#name').prev().css('color', "red");
+    nameError = true;
+    //displayError(nameField, "Name cannot be blank.");
   }
-  var validateForm = function(e) {
-    clearErrors();
-
-  if (!validateEmail(emailField.value)) {
-   e.preventDefault();
-   displayError(emailField, "A valid email address is required.");
-   }
+};
+//validate email
+function validateEmail() {
+  const emailRegex = /^[w-.+]+@[a-zA-Z0-9.-]+.[a-zA-z0-9]{2,4}$/;
+  const email = $('#mail').val();
+  let emailError = false;
+  if(emailRegex.test(email)){
+    $('#mail').css('border-color', "black");
+    $('#mail').prev().css('color', "black");
+    emailError = false;
+  } else {
+    $('#mail').css('border-color', "red");
+    $('#mail').prev().css('color', "red");
+    emailError = true;
   }
+};
+//validate credit card
+function validateCreditCard() {
+  const ccRegex = /^[0-9]{13,16}$/;
+  const credit = $('#cc-num').val();
+  let ccError = false;
+  if(ccRegex.test(credit)){
+    $('#cc-num').css('border-color', "black");
+    $('#cc-num').prev().css('color', "black");
+    ccError = false;
+  } else {
+    $('#cc-num').css('border-color', "red");
+    $('#cc-num').prev().css('color', "red");
+    ccError = true;
+  }
+};
+//validate zip code
+function validateZip() {
+  const zipRegex = /^[0-9]{5}$/;
+  const zip = $('#zip').val();
+  let zipError = false;
+  if(zipRegex.test(zip)){
+    $('#zip').css('border-color', "black");
+    $('#zip').prev().css('color', "black");
+    zipError = false;
+  } else {
+    $('#zip').css('border-color', "red");
+    $('#zip').prev().css('color', "red");
+    zipError = true;
+  }
+};
+//validate cvv
+function validateCVV() {
+  const cvvRegex = /^[0-9]{3}$/;
+  const cvv = $('#cvv').val();
+  let cvvError = false;
+  if(cvvRegex.test(cvv)){
+    $('#cvv').css('border-color', "black");
+    $('#cvv').prev().css('color', "black");
+    cvvError = false;
+  } else {
+    $('#cvv').css('border-color', "red");
+    $('#cvv').prev().css('color', "red");
+    cvvError = true;
+  }
+};
+
+
+//validate email
+  //   function ValidateEmail(email){
+  //     const emailRegex = /^[w-.+]+@[a-zA-Z0-9.-]+.[a-zA-z0-9]{2,4}$/;
+  //   if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(myForm.emailAddress.value)){
+  //     return (true)
+  //   }
+  //   alert("Sorry, you have entered an invalid email address!")
+  //   return (false)
+  // }
 
   //validate activity section
-  var validateAcivities = function() {
-    var re = /^[0-9]{}$/;
-    return re.test();
-  };
+  // var validateAcivities = function() {
+  //   var re = /^[0-9]{}$/;
+  //   return re.test();
+  // };
 
-  let activities = $('.activities.input[type=checkbox]');
-  var activityCount = 0;
-    for (var i = 0; i < activities.length; i++) {
-      if (activities[i].checked) {
-        activityCount++;
-    }
-  }
-    
   //Credit Card Number validation
   //Only validate if Paypal or Bitcoin is selected.
-  var validateCardNumber = function(number) {
-    var re = /^[0-9]{13,16}$/;
-    return re.test(number);
-  };
+  // var validateCardNumber = function(number) {
+  //   var re = /^[0-9]{13,16}$/;
+  //   return re.test(number);
+  // };
 
-  if (payment.value === 'credit card') {
+  // if (payment.value === 'credit card') {
 
-    if (creditNumber.value === "") {
-    e.preventDefault();
-    displayError(creditNumber, "Credit card number cannot be blank");
-    } else {  
-      if (!validateCardNumber(cardNumber.value)) {
-        e.preventDefault();
-        displayError(cardNumber, "Credit card number must be a 13-16 digit number");
-      }
-    }
-  };
+  //   if (creditNumber.value === "") {
+  //   e.preventDefault();
+  //   displayError(creditNumber, "Credit card number cannot be blank");
+  //   } else {  
+  //     if (!validateCardNumber(cardNumber.value)) {
+  //       e.preventDefault();
+  //       displayError(cardNumber, "Credit card number must be a 13-16 digit number");
+  //     }
+  //   }
+  // };
 
-  //validate zip code
-  var validateZipCode = function(number) {
-    var re = /^[0-9]{5}$/;
-    return re.test(number);
-  };
-  if (zipCode.value === "") {
-    e.preventDefault();
-    displayError(zipCode, "Zip Code must have 5 digits.");
-  } else {
-      if (!validateZipCode(zipCode.value)) {
-      e.preventDefault();
-      displayError(zipCode, "Zip Code must be a 5 digit number");
-    }
-  }
+  // //validate zip code
+  // var validateZipCode = function(number) {
+  //   var re = /^[0-9]{5}$/;
+  //   return re.test(number);
+  // };
+  // if (zipCode.value === "") {
+  //   // e.preventDefault();
+  //   displayError(zipCode, "Zip Code must have 5 digits.");
+  // } else {
+  //     if (!validateZipCode(zipCode.value)) {
+  //     // e.preventDefault();
+  //     displayError(zipCode, "Zip Code must be a 5 digit number");
+  //   }
+  // }
 
   //validate cvv number
-  var validateCVV = function(number) {
-    var re = /^[0-9]{3}$/;
-    return re.test(number);
-  };
-  if (CVV.value === "") {
-    e.preventDefault();
-    displayError(CVV, "Enter the CVV code on the back of your card.");
-  } else {
+  // var validateCVV = function(number) {
+  //   var re = /^[0-9]{3}$/;
+  //   return re.test(number);
+  // };
+  // if (CVV.value === "") {
+  //   e.preventDefault();
+  //   displayError(CVV, "Enter the CVV code on the back of your card.");
+  // } else {
     
-    if (!validateCVV(CVV.value)) {
-      e.preventDefault();
-      displayError(CVV, "CVV must be a 3 digit number");
-    }
-  }
+  //   if (!validateCVV(CVV.value)) {
+  //     e.preventDefault();
+  //     displayError(CVV, "CVV must be a 3 digit number");
+  //   }
+  // }
 
-submitButton.addEventListener("click", validateForm);
-let totalCostSpan = $('#totalCost');
-$('#totalCost').text("Total: $" + totalSum);
+  
+// if(submitcounter > 0) {
+//   e.preventDefault();
+//   console.log("Submit prevented");
+//   console.log(submitcounter);
+// } else {
+//   console.log("Registration accepted");
+//   alert("Registration accepted");
+// };
+
+function validateAll(){
+  validateName();
+  validateEmail();
+  creditCardError();
+}
+function creditCardError() {
+  if(selected === "Credit Card")
+  validateZip();
+  validateCreditCard();
+  validateCVV();
+}
+$('button type="submit"').click(function(){
+  event.preventDefault();
+  validateAll();
+  nameError = true;
+  emailError = true;
+  ccError = true;
+  zipError = true;
+  cvvError = true;
 });
+// submitButton.addEventListener("click", validateForm);
+// let totalCostSpan = $('#totalCost');
+// $('#totalCost').text("Total: $" + totalSum);
+
+});
+
