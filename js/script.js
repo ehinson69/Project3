@@ -231,7 +231,7 @@ function validateCVV() {
     event.preventDefault();
     validateAll();
   
-  if(nameError || emailError || creditCardError || activitiesError){
+  if(nameError && emailError && creditCardError && activitiesError){
     alert ('Please fix the errors in red.');
   } else {
   alert('Registration is complete!');
@@ -244,8 +244,7 @@ function validateCVV() {
   console.log("cvv is" + cvvError);
   console.log("activities is" + activitiesError);
   });
-// submitButton.addEventListener("click", validateForm);
-// let totalCostSpan = $('#totalCost');
-// $('#totalCost').text("Total: $" + totalSum);
+  submitButton.addEventListener("click", validateForm);
+
 });
 
