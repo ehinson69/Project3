@@ -99,7 +99,7 @@ $(document).ready(function () {
 
     if (selected === "Credit Card") {
       $('#credit-card').show();
-      $("#cc-num").focus();
+      // $("#cc-num").focus();
     } else if (selected === "PayPal") {
       $('.paypal').show();
     } else if (selected === "Bitcoin") {
@@ -109,7 +109,7 @@ $(document).ready(function () {
 
   //************************************Validation Section*************************/
   //Validating Fields and returning true or false to determine which fields are invalid
-  $("#other").click(function () {
+  $("form").click(function () {
     $("#target").submit();
 
 
@@ -189,18 +189,19 @@ $(document).ready(function () {
 
     function validateActivities() {
       if ($('.activities input:checked').length === 0) {
-        $('.activities legend').text('Please Select an Activity').css('color', 'red');
+        $('.activities legend').text('Please select an activity').css('color', 'red');
         return false;
       } else {
         $('.activities legend').text('Register for Activities:').css('color', '');
         return true;
       }
     }
+
     //submit event function that will scroll to the top if errors exist
     $('form').on('submit', function (e) {
       if ($('#payment').val() === 'credit card') {
-        if (validateName() && validateEmail() && validateActivities() && validateCreditCard() && validateCVV() && validateZipCode()) {
-          alert('Success!');
+        if (validateName() || validateEmail() || validateActivities() || validateCreditCard() || validateCVV() || validateZipCode()) {
+          // alert('Success!');
           return true;
         } else {
           e.preventDefault();
@@ -211,8 +212,8 @@ $(document).ready(function () {
           return false;
         }
       } else {
-        if (validateName() && validateEmail() && validateActivities()) {
-          alert('Success!');
+        if (validateName() || validateEmail() || validateActivities()) {
+          // alert('Success!');
         } else {
           e.preventDefault();
           $("html, body").animate({
