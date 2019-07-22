@@ -1,227 +1,290 @@
-//**Function to focus on Name field as soon as form is displayed.*/
-$(document).ready(function () {
-  $('#name').focus();
+$(document).ready(function() {
+  // Placing focus on first text field by default.
+  $("#name").focus();
 
-  //**Change function to show/hide Other field.*/
-  $('#other-title').hide();
-  $('#title').change(function () {
-    if ($('#title').val() == 'other') {
-      $('#other-title').show().focus();
+  // Revealing text field when the "Other" option is selected from the "Job Role" drop down menu.
+  $("#other-title").hide(); // Hiding the 'other' input field first.
+
+  $("#title").change(function () {
+    if ($(this).val() === "other") {
+      $("#other-title").show();
     } else {
-      $('#other-title').hide();
+      $("#other-title").hide();
     }
   });
 
-  //******************************T-shirt section********************************/
-  //**Select a t-shirt design and a color will show/hide.*/
-  // $('#color option', '#design option:first').hide();
+  //*********************************T-shirt section - display right color options ***************/
 
-  $('#color option').hide(); // Extra credit.
-  $('#design option:first').hide();
-  $("#colors-js-puns").hide();
-  $('#design').on('change', function () {
-    $('#color option').hide();
+  $("#colors-js-puns").hide(); // Extra credit: Hiding "Color" label and select menu until a T-Shirt design is selected from the "Design" menu.
+  $('#design option:first-child').hide(); // Hiding the select theme option.
+  $("#color option").hide(); //hiding all color options before showing right ones
 
-    if ($('#design option:selected').val() == "js puns") {
-      $('#color option:contains("JS Puns shirt only")').show();
-      $("#colors-js-puns").show(); // Extra credit.
-      $('#color').val("cornflowerblue");
+  $("#design").on('change', function () { //show right colors for selected design.
+    $("#color option").hide();
+
+    if ($(this).val() === "js puns") {
+      $("#color option[value='cornflowerblue']").show(); //show right colors
+      $("#color option[value='darkslategrey']").show();
+      $("#color option[value='gold']").show();
+      $("#color").val("cornflowerblue"); //select the first one as default
+      $("#colors-js-puns").show();
     } else {
-      $('#color option:contains("JS shirt only")').show();
-      $("#colors-js-puns").show(); // Extra credit.
-      $('#color').val("tomato");
+      ($(this).val() === "heart js")
+      $("#color option[value='tomato']").show();
+      $("#color option[value='steelblue']").show();
+      $("#color option[value='dimgrey']").show();
+      $("#color").val("tomato");
+      $("#colors-js-puns").show();
     }
   });
 
-  // //***********************************Activities Section********************/
-  //When each activity checkbox is checked, the cost will add or subtract. 
-  $(":checkbox").change(function () {
-    $(".conflict").remove();
-    $("#activityerror").remove();
+  //******************************** Register for Activities section ****************************/
 
-    var frameworks = $("input[name='js-frameworks']");
-    var express = $("input[name='express']");
-    var libraries = $("input[name='js-libs']");
-    var node = $("input[name='node']");
-    //Conflicts with the same day and times to disable if chosen and grayed out.
-    function timeConflict(workshop, conflict) {
-      if (workshop.is(":checked")) {
-        conflict.attr("disabled", true);
-        conflict.parent().after("<p class='conflict'>This workshop conflicts with your current selection.</p>");
-        conflict.parent().css('color', 'gray');
-      } else {
-        conflict.attr("disabled", false);
-        conflict.parent().css('color', '#000');
-      }
-    }
-    timeConflict(frameworks, express);
-    timeConflict(express, frameworks);
-    timeConflict(libraries, node);
-    timeConflict(node, libraries);
-  });
-  //Users select activities to register and receive a running total.
-  $(":checkbox").change(function () {
-    var total = 0;
-    $("#cost").remove();
-    //Only the Main Conference is $200, so when checked, it will add up.
-    if ($("input[name='all']").is(":checked")) {
-      total += 200;
-    }
-    //Workshops that are not the Main Conference are $100, so when checked, they will add to total.
-    $(".activities input:not([name='all'])").each(function () {
-      if ($(this).is(":checked")) {
-        total += 100;
-      }
-    });
-    //Append the activities and get a total cost for the user.
-    if (total > 0) {
-      $(".activities").append("<p id='cost'>Total cost: $" + total + " </p>");
+  // Set variables for activities
+  var jsFrameworks = $("input[name='js-frameworks'");
+  var jsLibraries = $("input[name='js-libs']");
+  var express = $("input[name='express']");
+  var nodeJS = $("input[name='node']");
+
+  // Add total cost of activities
+  var totalCost = 0;
+  $('.activities').append('<div id="total"></div>');
+
+  var updateCost = function (cost) {
+    totalCost += cost;
+    document.getElementById("total").innerHTML = "Total: $" + totalCost;
+  };
+
+  $("input[name='all']").change(function () {
+    if ($(this).prop("checked")) {
+      updateCost(200);
+    } else {
+      updateCost(-200);
     }
   });
 
-
-  //*****************************Payment Information section*****************************/
-  //Show credit card as default option and hide the PayPal and Bitcoin options until selected.
-  //Adding classes to the other payment option divs to make them easier to work with.
-  $('#credit-card').show().next().addClass('paypal').hide();
-  $('#credit-card').show().next().next().addClass('bitcoin').hide();
-
-  $('#credit-card').show();
-  $('#payment option[value="credit card"]').prop('selected', true);
-
-  $('#payment option[value="select_method"]').hide();
-
-  $('#payment').change((event) => {
-    let selected = $('#payment option:selected').text();
-    $('.paypal').hide();
-    $('#credit-card').hide();
-    $('.bitcoin').hide();
-
-    if (selected === "Credit Card") {
-      $('#credit-card').show();
-      // $("#cc-num").focus();
-    } else if (selected === "PayPal") {
-      $('.paypal').show();
-    } else if (selected === "Bitcoin") {
-      $('.bitcoin').show();
+  jsFrameworks.change(function () {
+    if ($(this).prop("checked")) {
+      express.prop("disabled", true);
+      express.parent().addClass("disabled");
+      express.parent().append('<span class="unavailable">&nbsp;&nbsp;&nbsp;&nbsp;Unavailable</span>');
+      updateCost(100);
+    } else {
+      express.prop("disabled", false);
+      express.parent().removeClass("disabled");
+      express.parent().find('.unavailable').remove();
+      updateCost(-100);
     }
   });
 
-  //************************************Validation Section*************************/
-  //Validating Fields and returning true or false to determine which fields are invalid
-  $("form").click(function () {
-    $("#target").submit();
-
-
-    function validateName() {
-      let nameRegex = /^([a-zA-Z ]){2,30}$/;
-
-      if (!nameRegex.test($('#name').val())) {
-        $('#name').removeClass('success').addClass('error');
-        $('#name').prev().text('Name field is required.').css('color', 'red');
-        return false;
-      } else {
-        $('#name').removeClass('error').addClass('success')
-        $('#name').prev().text('Name:').css('color', '');
-        return true;
-      }
+  jsLibraries.change(function () {
+    if ($(this).prop("checked")) {
+      nodeJS.prop("disabled", true);
+      nodeJS.parent().addClass("disabled");
+      nodeJS.parent().append('<span class="unavailable">&nbsp;&nbsp;&nbsp;&nbsp;Unavailable</span>');
+      updateCost(100);
+    } else {
+      nodeJS.prop("disabled", false);
+      nodeJS.parent().removeClass("disabled");
+      nodeJS.parent().find('.unavailable').remove();
+      updateCost(-100);
     }
-
-    function validateEmail() {
-      let emailAdress = /^[^@]+@[^@.]+\.[a-z]+$/i;
-
-      if (emailAdress.test($('#mail').val())) {
-        $('#mail').removeClass('error').addClass('success');
-        $('#mail').prev().text('Email:').css('color', '');
-        return true;
-      } else if ($('#mail').val() !== '') {
-        $('#mail').removeClass('success').addClass('error');
-        $('#mail').prev().text('Email is invalid').css('color', 'red');
-        return false;
-      } else {
-        $('#mail').removeClass('success').addClass('error');
-        $('#mail').prev().text('Email is invalid').css('color', 'red');
-        return false;
-      }
-    }
-
-    function validateCreditCard() {
-      let creditCard = /^\d{13,16}$/;
-
-      if (creditCard.test($('#cc-num').val())) {
-        $('#cc-num').removeClass('error').addClass('success');
-        $('#cc-num').prev().text('Card Number:').css('color', '');
-        return true;
-      } else {
-        $('#cc-num').removeClass('success').addClass('error');
-        $('#cc-num').prev().text('Card number needs to be 13 to 16 digits').css('color', 'red');
-        return false;
-      }
-    }
-
-    function validateZipCode() {
-      let zipCode = /^\d{5}(?:[-\s]\d{4})?$/;
-
-      if (zipCode.test($('#zip').val())) {
-        $('#zip').removeClass('error').addClass('success');
-        $('#zip').prev().text('Zip Code:').css('color', 'black');
-        return true;
-      } else {
-        $('#zip').removeClass('success').addClass('error');
-        $('#zip').prev().text('Zip code needs to be 5 digits').css('color', 'red');
-        return false;
-      }
-    }
-
-    function validateCVV() {
-      let cvvNumber = /^[0-9]{3}$/;
-
-      if (cvvNumber.test($('#cvv').val())) {
-        $('#cvv').removeClass('error').addClass('success');
-        $('#cvv').prev().text('CVV:').css('color', 'black');
-        return true;
-      } else {
-        $('#cvv').removeClass('success').addClass('error');
-        $('#cvv').prev().text('CVV number needs to be 3 to 4 digits').css('color', 'red');
-        return false;
-      }
-    }
-
-    function validateActivities() {
-      if ($('.activities input:checked').length === 0) {
-        $('.activities legend').text('Please select an activity').css('color', 'red');
-        return false;
-      } else {
-        $('.activities legend').text('Register for Activities:').css('color', '');
-        return true;
-      }
-    }
-
-    //submit event function that will scroll to the top if errors exist
-    $('form').on('submit', function (e) {
-      if ($('#payment').val() === 'credit card') {
-        if (validateName() || validateEmail() || validateActivities() || validateCreditCard() || validateCVV() || validateZipCode()) {
-          // alert('Success!');
-          return true;
-        } else {
-          e.preventDefault();
-          $("html, body").animate({
-            scrollTop: 0
-          }, "slow");
-          $('fieldset legend').first().after().text('Form is incomplete. Please fill out all required fields marked in red.').css('color', 'red');
-          return false;
-        }
-      } else {
-        if (validateName() || validateEmail() || validateActivities()) {
-          // alert('Success!');
-        } else {
-          e.preventDefault();
-          $("html, body").animate({
-            scrollTop: 0
-          }, "slow");
-          $('fieldset legend').first().after().text('Form is incomplete. Please fill out all required fields marked in red.').css('color', 'red');
-        }
-      };
-    });
   });
+
+  express.change(function () {
+    if ($(this).prop("checked")) {
+      jsFrameworks.prop("disabled", true);
+      jsFrameworks.parent().addClass("disabled");
+      jsFrameworks.parent().append('<span class="unavailable">&nbsp;&nbsp;&nbsp;&nbsp;Unavailable</span>');
+      updateCost(100);
+    } else {
+      jsFrameworks.prop("disabled", false);
+      jsFrameworks.parent().removeClass("disabled");
+      jsFrameworks.parent().find('.unavailable').remove();
+      updateCost(-100);
+    }
+  });
+
+  nodeJS.change(function () {
+    if ($(this).prop("checked")) {
+      jsLibraries.prop("disabled", true);
+      jsLibraries.parent().addClass("disabled");
+      jsLibraries.parent().append('<span class="unavailable">&nbsp;&nbsp;&nbsp;&nbsp;Unavailable</span>');
+      updateCost(100);
+    } else {
+      jsLibraries.prop("disabled", false);
+      jsLibraries.parent().removeClass("disabled");
+      jsLibraries.parent().find('.unavailable').remove();
+      updateCost(-100);
+    }
+  });
+
+  $("input[name='build-tools']").change(function () {
+    if ($(this).prop("checked")) {
+      updateCost(100);
+    } else {
+      updateCost(-100);
+    }
+  });
+
+  $("input[name='npm']").change(function () {
+    if ($(this).prop("checked")) {
+      updateCost(100);
+    } else {
+      updateCost(-100);
+    }
+  });
+
+  //***//**************************************Payment Information section*****************************/
+
+  $("#payment option[value='select_method']").hide(); //Hiding the select Payment Method.
+  $("#payment").val("credit card"); //Showing credit Card by default
+  $('div p:contains("If you selected the PayPal option")').hide(); //Hiding the <p> tag elements initially.
+  $('div p:contains("If you selected the Bitcoin option")').hide();
+
+
+  $("#payment").on('change', function () {
+
+    if ($("#payment").val() === "credit card") {
+      $("#credit-card").show();
+      $('div p:contains("If you selected the PayPal option")').hide();
+      $('div p:contains("If you selected the Bitcoin option")').hide();
+    } else if
+
+    ($("#payment").val() === "paypal") {
+      $("#credit-card").hide();
+      $("#payment option[value='paypal']").show();
+      $('div p:contains("If you selected the Bitcoin option")').hide();
+      $('div p:contains("If you selected the PayPal option")').show();
+
+    } else {
+      ($("#payment").val() === "bitcoin")
+      $("#credit-card").hide();
+      $("#payment option[value='bitcoin']").show();
+      $('div p:contains("If you selected the PayPal option")').hide();
+      $('div p:contains("If you selected the Bitcoin option")').show();
+    }
+  });
+
+  //****************************** Form Validation and Validation Messages ***************************/
+
+  // Add Error/Success Indicators on Keyup for fun
+  $('#name, #mail, #cc-num, #zip, #cvv, #other-field').keyup(function () {
+    if ($(this).val() === "") {
+      $(this).removeClass('success');
+      $(this).addClass('error');
+    } else {
+      $(this).removeClass('error');
+      $(this).addClass('success');
+    }
+  });
+
+  var emailAddress = /^[-a-z0-9~!$%^&*_=+}{\'?]+(\.[-a-z0-9~!$%^&*_=+}{\'?]+)*@([a-z0-9_][-a-z0-9_]*(\.[-a-z0-9_]+)*\.(aero|arpa|biz|com|coop|edu|gov|info|int|mil|museum|name|net|org|pro|travel|mobi|[a-z][a-z])|([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}))(:[0-9]{1,5})?$/i;
+  var creditCard = /^[0-9]{13,16}$/;
+  var zipCode = /^[0-9]{5}$/;
+  var cvv = /^[0-9]{3}$/;
+  var errorMessage = "";
+
+  $('form').prepend('<p id="error-message"></p>');
+  $('#error-message').hide();
+  $('form').submit(function (e) {
+    e.preventDefault();
+
+    if ($('#name').val() === "") {
+      console.log("Error!");
+      $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+      errorMessage = "<h2>Error!</h2> Please enter a valid first and last name."; //Extra credit
+      errorMessage = errorMessage.fontcolor("red"); //Extra credit
+      $('#name').css('border-color', 'red'); //Extra credit
+      $('#mail').css('border-color', ''); //Not displaying border color
+      $("#cc-num").css('border-color', '');
+      $("#cvv").css('border-color', '');
+      $("#zip").css('border-color', '');
+      $('#name').addClass('error');
+      $('#name').focus();
+
+    } else if (!emailAddress.test($('#mail').val())) {
+      $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+      errorMessage = "<h2>Error!</h2> Please enter a valid email address."; //Extra credit
+      errorMessage = errorMessage.fontcolor("red"); //Extra credit
+      $('#mail').css('border-color', 'red'); //Extra credit
+      $("#cc-num").css('border-color', '');
+      $("#cvv").css('border-color', '');
+      $("#zip").css('border-color', '');
+      $('#name').css('border-color', '');
+      $('#mail').focus();
+
+    } else if ($(".activities > label > input:checked").length === 0) {
+      $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+      errorMessage = "<h2>Error!</h2> Please select at least one activity."; //Extra credit
+      errorMessage = errorMessage.fontcolor("red"); //Extra credit
+      $(".activities").css('color', 'red');
+      $('#name').css('border-color', '');
+      $("#cc-num").css('border-color', '');
+      $("#cvv").css('border-color', '');
+      $("#zip").css('border-color', '');
+      $('#mail').css('border-color', '');
+      $('.activities').focus();
+    } else if ($("#payment").val() === "credit card" && !creditCard.test($("#cc-num").val())) {
+      $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+      errorMessage = "<h2>Error!</h2>Please enter a valid credit card number between 13 and 16 digits.";
+      errorMessage = errorMessage.fontcolor("red"); //Extra credit
+      $("#cc-num").css('border-color', 'red'); //Extra credit
+      $('#mail').css('border-color', '');
+      $("#cvv").css('border-color', '');
+      $('#name').css('border-color', '');
+      $("#zip").css('border-color', '');
+      $('#cc-num').focus();
+
+    } else if ($("#payment").val() === "credit card" && !zipCode.test($("#zip").val())) {
+      $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+      errorMessage = "<h2>Error!</h2>Please enter a 5 digit zip code.";
+      errorMessage = errorMessage.fontcolor("red");
+      $("#zip").css('border-color', 'red'); //Extra credit
+      $("#cc-num").css('border-color', '');
+      $('#mail').css('border-color', '');
+      $("#cvv").css('border-color', '');
+      $('#zip').focus();
+
+    } else if ($("#payment").val() === "credit card" && !cvv.test($("#cvv").val())) {
+      $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+      errorMessage = "<h2>Error!</h2>Please enter a 3 digit CVV";
+      errorMessage = errorMessage.fontcolor("red");
+      $("#cvv").css('border-color', 'red'); //Extra credit
+      $('#mail').css('border-color', '');
+      $("#zip").css('border-color', '');
+      $("#cc-num").css('border-color', '');
+      $('#cvv').focus();
+
+    } else {
+      $("html, body").animate({
+        scrollTop: 0
+      }, "slow");
+      errorMessage = "";
+      alert("Thanks for registering!");
+      $("#cvv").css('border-color', '');
+      $("#zip").css('border-color', '');
+      $("#cc-num").css('border-color', '');
+      $('#mail').css('border-color', '');
+
+      location.reload();
+    }
+    document.getElementById('error-message').innerHTML = errorMessage;
+    $('#error-message').show();
+
+  });
+
+
 });
