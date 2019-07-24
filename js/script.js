@@ -13,28 +13,24 @@ $(document).ready(function() {
     }
   });
 
-  //*********************************T-shirt section - display right color options ***************/
+//**Select a t-shirt design and a color will show/hide.*/
+     
+  $('#color option').hide();
+  $('#color option').hide();// Extra credit.
+  $('#design option:first').hide();
 
-  $("#colors-js-puns").hide(); // Extra credit: Hiding "Color" label and select menu until a T-Shirt design is selected from the "Design" menu.
-  $('#design option:first-child').hide(); // Hiding the select theme option.
-  $("#color option").hide(); //hiding all color options before showing right ones
+  $("#colors-js-puns").hide();
+  $('#design').on('change', function() {
+    $('#color option').hide();
 
-  $("#design").on('change', function () { //show right colors for selected design.
-    $("#color option").hide();
-
-    if ($(this).val() === "js puns") {
-      $("#color option[value='cornflowerblue']").show(); //show right colors
-      $("#color option[value='darkslategrey']").show();
-      $("#color option[value='gold']").show();
-      $("#color").val("cornflowerblue"); //select the first one as default
-      $("#colors-js-puns").show();
+    if($('#design option:selected').val() == "js puns") {
+      $('#color option:contains("JS Puns shirt only")').show();
+      $("#colors-js-puns").show();// Extra credit.
+      $('#color').val("cornflowerblue");
     } else {
-      ($(this).val() === "heart js")
-      $("#color option[value='tomato']").show();
-      $("#color option[value='steelblue']").show();
-      $("#color option[value='dimgrey']").show();
-      $("#color").val("tomato");
-      $("#colors-js-puns").show();
+      $('#color option:contains("JS shirt only")').show();
+      $("#colors-js-puns").show();// Extra credit.
+      $('#color').val("tomato");
     }
   });
 
