@@ -18,6 +18,7 @@ $(document).ready(function() {
     }
   });
 
+<<<<<<< HEAD
   $('colors-js-pun').hide(); //Hiding the other color options until a choice is made.
   $('#payment option[value = "credit card"]').attr("selected", true); //CC is defaulted.
   $('#color').prepend('<option selected>Please select a T-shirt theme</option>');//Color dropdown
@@ -28,6 +29,26 @@ $(document).ready(function() {
       $("#other-title").show();
     } else {
       $("#other-title").hide();
+=======
+//**Select a t-shirt design and a color will show/hide.*/
+     
+  $('#color option').hide();
+  $('#color option').hide();// Extra credit.
+  $('#design option:first').hide();
+
+  $("#colors-js-puns").hide();
+  $('#design').on('change', function() {
+    $('#color option').hide();
+
+    if($('#design option:selected').val() == "js puns") {
+      $('#color option:contains("JS Puns shirt only")').show();
+      $("#colors-js-puns").show();// Extra credit.
+      $('#color').val("cornflowerblue");
+    } else {
+      $('#color option:contains("JS shirt only")').show();
+      $("#colors-js-puns").show();// Extra credit.
+      $('#color').val("tomato");
+>>>>>>> 82499c76e3344e6903dbe8b6aa8bb6979acb6a7d
     }
   });
 
